@@ -1,0 +1,17 @@
+{
+  "setup": {
+    "aircraft_model": "Rascal110-JSBSim",
+    "timestep": 0.001,
+    "mass": 100,
+    "throttle": 0,
+    "wind": 100,
+    "ini_velocity": 100,
+    "ini_altitude": 1000
+  },
+  "ic_aircraft": {
+    "phiItgt": 0,
+    "thetaItgt": 0,
+    "psiItgt": 0,
+    "altItgt": 0
+  }
+}
