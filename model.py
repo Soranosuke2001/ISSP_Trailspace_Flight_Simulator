@@ -15,8 +15,6 @@ class JsbsimInterface:
         self.exec['mass-properties/mass[0]'] = mass_kg # Set the mass of the aircraft
         self.exec['fcs/throttle-cmd-norm'] = throttle  # Set the throttle of the aircraft
 
-        self.throttle = throttle
-
     def check_ic(self):
         success = self.run_ic()
 
@@ -42,17 +40,8 @@ class JsbsimInterface:
         print(self)
         print()
 
-    def set_throttle(self):
-        self.exec['fcs/throttle-cmd-norm'] = self.throttle
-        self.throttle = self.throttle + 0.001 * 1
-
-        if self.throttle > 1:
-            self.throttle = 1
-
-    def calc_aileron(self, phiItgt):
-        phi = self.exec['attitude/roll-rad']
-        phiComm = -1 * (phi - PHI_SET_POINT)
-        phiItgt = phiItgt + 0.01 * phiComm
+    def set_throttle(self, throttle =0.0):
+        self.exec['fcs/throttle-cmd-norm'] = throttle
     
     def set_control_surfaces(self, elevator=0.0, aileron=0.0, rudder=0.0):
         """Adjust control surfaces. Values range from -1.0 to 1.0."""
