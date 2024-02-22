@@ -1,6 +1,6 @@
 from model import JsbsimInterface
 from controller import Controller
-
+import os
 from helpers.read_config import read_setup
 
 if __name__ == "__main__":
@@ -8,16 +8,18 @@ if __name__ == "__main__":
 
     # set the initial conditions
     sim = JsbsimInterface(
-        aircraft_model,
-        ini_alt,
-        ini_vel,
-        mass,
-        wind,
-        throttle,
+        None,
+        aircraft_model = aircraft_model,
+        initial_altitude_ft = ini_alt,
+        initial_velocity_kts = ini_vel,
+        mass_kg = mass,
+        wind = wind,
+        throttle = throttle,
     )
     sim.set_dt(timestep)
-
-    sim.set_output_directive("config/flightgear.xml")
+    current_working_directory = os.getcwd()
+    full_path = os.path.join(current_working_directory, 'config/flightgear.xml')
+    sim.set_output_directive(full_path)
 
     # check initial conditions and print aircraft config
     sim.check_ic()
@@ -32,17 +34,17 @@ if __name__ == "__main__":
         # call the controller step function
         sim_inputs = {
             'phiSetpoint': 0.15,
-            'phi': sim.exec['attitude/roll-rad'],
+            'phi': sim['attitude/roll-rad'],
             'altSetpoint': 1000,
-            'alt': sim.exec['position/h-sl-ft']
+            'alt': sim['position/h-sl-ft']
         }
         ctrlOutput = controllerObj.step(sim_inputs)
-
+        print('running')
         # run simulation one time step
         sim.set_throttle(ctrlOutput['throttle'])
         sim.set_control_surfaces(ctrlOutput['aileronComm'], 0.0, 0.0)
         sim.run()
 
         # continue from here
-        if sim.exec['position/h-sl-ft'] <= 0:
+        if sim['position/h-sl-ft'] <= 0:
             break

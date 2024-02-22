@@ -3,8 +3,9 @@ import jsbsim
 from constants.constants import *
 
 class JsbsimInterface(jsbsim.FGFDMExec):
-    def __init__(self, aircraft_model='Rascal110-JSBSim', initial_altitude_ft=1000, initial_velocity_kts=100, mass_kg=1000, wind=100, throttle=0):
+    def __init__(self, pm_root, aircraft_model='Rascal110-JSBSim', initial_altitude_ft=1000, initial_velocity_kts=100, mass_kg=1000, wind=100, throttle=0):
         # self.exec = jsbsim.FGFDMExec(None)
+        super().__init__()
         self.set_debug_level(0)
         self.load_model(aircraft_model)
         
