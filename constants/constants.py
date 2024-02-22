@@ -1,1 +1,1 @@
-filename = 'config.json'
+filename = 'config/config.json'
