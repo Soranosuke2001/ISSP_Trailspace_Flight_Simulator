@@ -1,7 +1,7 @@
-from repo.model import JsbsimInterface
+from model import JsbsimInterface
 from controller import Controller
 
-from helpers.read_config import read_setup, read_ic_aircraft
+from helpers.read_config import read_setup
 
 if __name__ == "__main__":
     aircraft_model, timestep, mass, throttle, wind, ini_vel, ini_alt = read_setup()
@@ -17,6 +17,8 @@ if __name__ == "__main__":
     )
     sim.set_dt(timestep)
 
+    sim.set_output_directive("config/flightgear.xml")
+
     # check initial conditions and print aircraft config
     sim.check_ic()
     sim.print_config()
@@ -31,6 +33,8 @@ if __name__ == "__main__":
         sim_inputs = {
             'phiSetpoint': 0.15,
             'phi': sim.exec['attitude/roll-rad'],
+            'altSetpoint': 1000,
+            'alt': sim.exec['position/h-sl-ft']
         }
         ctrlOutput = controllerObj.step(sim_inputs)
 
@@ -40,3 +44,5 @@ if __name__ == "__main__":
         sim.run()
 
         # continue from here
+        if sim.exec['position/h-sl-ft'] <= 0:
+            break

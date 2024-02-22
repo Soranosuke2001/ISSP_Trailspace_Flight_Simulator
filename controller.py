@@ -47,9 +47,21 @@ class Controller:
         self.aileronComm = self.Kp_phi*phiErr + self.Ki_phi*self.phiItgt
 
         # bring other controllers here
+        
+        # Altitude control
+        altErr = (simulation_inputs['altSetpoint'] - simulation_inputs['alt'])
+        self.altItgt = self.altItgt + altErr
+        pitchComm = self.Kd_alt * altErr + self.altItgt
 
-        # return the calculated control surface commands
+        # Saturate pitch command within limits
+        pitchComm = max(min(pitchComm, self.thetaMax), -self.thetaMax)
+
+        # Update target pitch angle
+        self.thetaItgt = pitchComm
+
+        # Return the calculated control surface commands
         return {
             'throttle': self.throttle,
-            'aileronComm': self.aileronComm
+            'aileronComm': self.aileronComm,
+            'pitchComm': pitchComm
         }

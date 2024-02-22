@@ -20,7 +20,7 @@ def read_ic_aircraft():
 
 
 def read_setup():
-    data = read_config()
+    data = read_config("config/config.json")
 
     aircraft_model = data['setup']['aircraft_model']
     timestep = data['setup']['timestep']
