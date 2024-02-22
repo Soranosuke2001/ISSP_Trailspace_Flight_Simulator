@@ -43,7 +43,7 @@ if __name__ == "__main__":
         # run simulation one time step
         sim.set_throttle(ctrlOutput['throttle'])
         sim.set_control_surfaces(ctrlOutput['aileronComm'], 0.0, 0.0)
-        sim.run()
+        sim.run_simulation_step()
 
         # continue from here
         if sim['position/h-sl-ft'] <= 0:
