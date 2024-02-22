@@ -59,7 +59,6 @@ class JsbsimInterface(jsbsim.FGFDMExec):
 
     def run_simulation_step(self, delta_time=1.0):
         """Advance the simulation by a specified time step in seconds."""
-        self.run_ic()  # Initialize conditions
         self.run()     # Advance the simulation
 
     def get_simulation_data(self):
