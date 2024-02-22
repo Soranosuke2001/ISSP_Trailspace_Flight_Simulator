@@ -44,10 +44,10 @@ class JsbsimInterface(jsbsim.FGFDMExec):
     def set_throttle(self, throttle =0.0):
         self['fcs/throttle-cmd-norm'] = throttle
     
-    def set_control_surfaces(self, elevator=0.0, aileron=0.0, rudder=0.0):
+    def set_control_surfaces(self, aileron=0.0, elevator=0.0, rudder=0.0):
         """Adjust control surfaces. Values range from -1.0 to 1.0."""
-        self['fcs/elevator-cmd-norm'] = elevator  # Elevator control
         self['fcs/aileron-cmd-norm'] = aileron    # Aileron control
+        self['fcs/elevator-cmd-norm'] = elevator  # Elevator control
         self['fcs/rudder-cmd-norm'] = rudder      # Rudder control
 
     def adjust_velocity_and_altitude(self, velocity_kts=None, altitude_ft=None):
@@ -59,7 +59,6 @@ class JsbsimInterface(jsbsim.FGFDMExec):
 
     def run_simulation_step(self, delta_time=1.0):
         """Advance the simulation by a specified time step in seconds."""
-        self.run_ic()  # Initialize conditions
         self.run()     # Advance the simulation
 
     def get_simulation_data(self):
