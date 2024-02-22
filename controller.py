@@ -1,5 +1,4 @@
 class Controller:
-<<<<<<< HEAD
     def __init__(self):
         self.throttle = 0.5  # Initial throttle setting to maintain level flight
         self.Kp_phi = 0.1  # Proportional gain for roll control
@@ -39,7 +38,7 @@ class Controller:
             'aileronComm': aileron_command,
             'elevator': elevator_command,
         }
-=======
+
 
     # parameters
     Kp_phi = 1
@@ -100,4 +99,4 @@ class Controller:
             'aileronComm': aileronComm,
             'elevatorComm': elevatorComm
         }
->>>>>>> 0447b05564e74284fe1b4eee114a2594326d00b2
+
