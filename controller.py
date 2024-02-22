@@ -2,8 +2,9 @@ class Controller:
 
     # parameters
     Kp_phi = 1
-    Ki_phi = 0.01
-    Kd_alt = 0.002
+    Ki_phi = 1
+    Kp_theta = 1
+    Ki_theta = 1
     thetaMax = 0.15
     throttleRamp = 0.001
 
@@ -12,10 +13,7 @@ class Controller:
     thetaItgt = 0.0
     psiItgt = 0
     altItgt = 0
-    
-    # outputs
     throttle = 0
-    aileronComm = 0.0
 
     def __init__(self, **kwargs):
 
@@ -43,25 +41,21 @@ class Controller:
 
         # Roll angle control
         phiErr = (simulation_inputs['phiSetpoint'] - simulation_inputs['phi'])
-        self.phiItgt = self.phiItgt + phiErr
-        self.aileronComm = self.Kp_phi*phiErr + self.Ki_phi*self.phiItgt
+        self.phiItgt = self.phiItgt + phiErr*self.dT
+        aileronComm = self.Kp_phi*phiErr + self.Ki_phi*self.phiItgt
 
-        # bring other controllers here
-        
-        # Altitude control
-        altErr = (simulation_inputs['altSetpoint'] - simulation_inputs['alt'])
-        self.altItgt = self.altItgt + altErr
-        pitchComm = self.Kd_alt * altErr + self.altItgt
+        # Pitch angle control
+        thetaErr = 0 - simulation_inputs['theta']
+        self.thetaItgt = self.thetaItgt + thetaErr*self.dT
+        elevatorComm = - (self.Kp_theta * thetaErr + self.Ki_theta*self.thetaItgt)
 
-        # Saturate pitch command within limits
-        pitchComm = max(min(pitchComm, self.thetaMax), -self.thetaMax)
-
-        # Update target pitch angle
-        self.thetaItgt = pitchComm
+        # Saturate elevator and aileron command within limits
+        aileronComm = max(min(aileronComm, 1.0), -1.0)
+        elevatorComm = max(min(elevatorComm, 1.0), -1.0)
 
         # Return the calculated control surface commands
         return {
             'throttle': self.throttle,
-            'aileronComm': self.aileronComm,
-            'pitchComm': pitchComm
+            'aileronComm': aileronComm,
+            'elevatorComm': elevatorComm
         }

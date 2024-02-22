@@ -26,7 +26,7 @@ if __name__ == "__main__":
     sim.print_config()
 
     # initialize controller object
-    controllerObj = Controller()
+    controllerObj = Controller(dT = timestep)
 
     # simulation
     while True:
@@ -35,16 +35,18 @@ if __name__ == "__main__":
         sim_inputs = {
             'phiSetpoint': 0.15,
             'phi': sim['attitude/roll-rad'],
+            'theta': sim['attitude/pitch-rad'],
             'altSetpoint': 1000,
             'alt': sim['position/h-sl-ft']
         }
         ctrlOutput = controllerObj.step(sim_inputs)
-        print('running')
+        
         # run simulation one time step
         sim.set_throttle(ctrlOutput['throttle'])
-        sim.set_control_surfaces(ctrlOutput['aileronComm'], 0.0, 0.0)
+        sim.set_control_surfaces(ctrlOutput['aileronComm'], ctrlOutput['elevatorComm'], 0.0)
         sim.run_simulation_step()
 
+        print(sim['position/h-sl-ft'])
         # continue from here
         if sim['position/h-sl-ft'] <= 0:
             break
