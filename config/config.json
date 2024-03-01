@@ -1,4 +1,7 @@
 {
+  "file": {
+    "csv_filename": "results.csv"
+  },
   "setup": {
     "aircraft_model": "Rascal110-JSBSim",
     "timestep": 0.001,
