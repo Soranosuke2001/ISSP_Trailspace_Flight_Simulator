@@ -10,6 +10,10 @@ class JsbsimInterface(jsbsim.FGFDMExec):
         super().__init__()
         self.set_debug_level(0)
         self.load_model(aircraft_model)
+
+        csv_filename, decimals = read_file_config()
+        self.csv_filename = csv_filename
+        self.decimals = decimals
         
         # Set initial conditions
         self['ic/h-sl-ft'] = initial_altitude_ft  # Initial altitude in feet
@@ -72,19 +76,17 @@ class JsbsimInterface(jsbsim.FGFDMExec):
         }
 
     def update_simulation_data(self, data):
-        data['altitude'].append(self['position/h-sl-ft'])
+        data['altitude'].append(round(self['position/h-sl-ft'], self.decimals))
 
-        data['xaccel'].append(self.get_property_value('accelerations/udot-ft_sec2'))
-        data['yaccel'].append(self.get_property_value('accelerations/vdot-ft_sec2'))
-        data['zaccel'].append(self.get_property_value('accelerations/wdot-ft_sec2'))
+        data['xaccel'].append(round(self.get_property_value('accelerations/udot-ft_sec2'), self.decimals))
+        data['yaccel'].append(round(self.get_property_value('accelerations/vdot-ft_sec2'), self.decimals))
+        data['zaccel'].append(round(self.get_property_value('accelerations/wdot-ft_sec2'), self.decimals))
         
-        data['elevator'].append(self.get_property_value('fcs/elevator-cmd-norm'))
-        data['aileron'].append(self.get_property_value('fcs/aileron-cmd-norm'))
-        data['rudder'].append(self.get_property_value('fcs/rudder-cmd-norm'))
+        data['elevator'].append(round(self.get_property_value('fcs/elevator-cmd-norm'), self.decimals))
+        data['aileron'].append(round(self.get_property_value('fcs/aileron-cmd-norm'), self.decimals))
+        data['rudder'].append(round(self.get_property_value('fcs/rudder-cmd-norm'), self.decimals))
     
     def save_simulation_data(self, data):
-        csv_filename = read_file_config()
-
         df = pd.DataFrame(data)
-        df.to_csv(csv_filename, index=False)
+        df.to_csv(self.csv_filename, index=False)
 
