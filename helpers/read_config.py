@@ -23,8 +23,9 @@ def read_file_config():
     data = read_config()
 
     csv_filename = data['file']['csv_filename']
+    decimals = data['file']['decimals']
 
-    return csv_filename
+    return csv_filename, decimals
 
 
 def read_setup():

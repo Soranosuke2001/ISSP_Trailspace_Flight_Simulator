@@ -1,6 +1,7 @@
 {
   "file": {
-    "csv_filename": "results.csv"
+    "csv_filename": "results.csv",
+    "decimals": 4
   },
   "setup": {
     "aircraft_model": "Rascal110-JSBSim",
