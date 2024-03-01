@@ -1,7 +1,6 @@
 from model import JsbsimInterface
 from controller import Controller
 import os
-import numpy as np
 
 from helpers.read_config import read_setup
 
@@ -62,7 +61,7 @@ if __name__ == "__main__":
 
         print(sim['position/h-sl-ft'])
         # continue from here
-        if sim['position/h-sl-ft'] <= 0:
+        if sim['position/h-sl-ft'] <= 0 or len(data['aileron']) == 2000:
             break
 
     # write the simulation results to a csv file
