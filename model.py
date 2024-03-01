@@ -1,6 +1,8 @@
 import jsbsim
+import pandas as pd
 
 from constants.constants import *
+from helpers.read_config import read_file_config
 
 class JsbsimInterface(jsbsim.FGFDMExec):
     def __init__(self, pm_root, aircraft_model='Rascal110-JSBSim', initial_altitude_ft=1000, initial_velocity_kts=100, mass_kg=1000, wind=100, throttle=0):
@@ -68,3 +70,21 @@ class JsbsimInterface(jsbsim.FGFDMExec):
             'velocity': self['velocities/vc-kts'],
             'mass': self['mass-properties/mass[0]']
         }
+
+    def update_simulation_data(self, data):
+        data['altitude'].append(self['position/h-sl-ft'])
+
+        data['xaccel'].append(self.get_property_value('accelerations/udot-ft_sec2'))
+        data['yaccel'].append(self.get_property_value('accelerations/vdot-ft_sec2'))
+        data['zaccel'].append(self.get_property_value('accelerations/wdot-ft_sec2'))
+        
+        data['elevator'].append(self.get_property_value('fcs/elevator-cmd-norm'))
+        data['aileron'].append(self.get_property_value('fcs/aileron-cmd-norm'))
+        data['rudder'].append(self.get_property_value('fcs/rudder-cmd-norm'))
+    
+    def save_simulation_data(self, data):
+        csv_filename = read_file_config()
+
+        df = pd.DataFrame(data)
+        df.to_csv(csv_filename, index=False)
+

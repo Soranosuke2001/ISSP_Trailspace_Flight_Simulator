@@ -19,6 +19,14 @@ def read_ic_aircraft():
     return phiItgt, thetaItgt, psiItgt, altItgt
 
 
+def read_file_config():
+    data = read_config()
+
+    csv_filename = data['file']['csv_filename']
+
+    return csv_filename
+
+
 def read_setup():
     data = read_config()
 
