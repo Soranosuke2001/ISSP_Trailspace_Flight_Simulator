@@ -1,6 +1,6 @@
 import jsbsim
 import pandas as pd
-
+from math import radians, cos, sin
 from constants.constants import *
 from helpers.read_config import read_file_config
 
@@ -90,3 +90,19 @@ class JsbsimInterface(jsbsim.FGFDMExec):
         df = pd.DataFrame(data)
         df.to_csv(self.csv_filename, index=False)
 
+    def set_wind(self, wind_config):
+        direction_deg = wind_config.get('direction_deg', 0)
+        speed_kts = (wind_config.get('speed_kts_min', 0) + wind_config.get('speed_kts_max', 0)) / 2
+        
+        # Convert wind speed from knots to feet per second (1 kt = 1.68781 ft/s)
+        speed_fps = speed_kts * 1.68781
+        
+        # Calculate NED components based on wind direction and speed
+        wind_north = speed_fps * cos(radians(direction_deg))
+        wind_east = speed_fps * sin(radians(direction_deg))
+        wind_down = -10  # Assuming no vertical wind component
+        
+        # Set wind using the NED properties
+        self['atmosphere/wind-north-fps'] = wind_north
+        self['atmosphere/wind-east-fps'] = wind_east
+        self['atmosphere/wind-down-fps'] = wind_down

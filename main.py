@@ -2,7 +2,7 @@ from model import JsbsimInterface
 from controller import Controller
 import os
 
-from helpers.read_config import read_setup
+from helpers.read_config import read_setup, read_wind_config
 
 if __name__ == "__main__":
     aircraft_model, timestep, mass, throttle, wind, ini_vel, ini_alt = read_setup()
@@ -38,10 +38,15 @@ if __name__ == "__main__":
 
     # initialize controller object
     controllerObj = Controller(dT = timestep)
-
+    wind_update_frequency = 100
+    simulation_step = 0
     # simulation
     while True:
-
+        if simulation_step % wind_update_frequency == 0:
+            # Dynamically read or calculate new wind conditions
+            # This could be a fixed update, a random one, or based on an external input
+            new_wind_config = read_wind_config()  # Assuming this could return updated conditions
+            sim.set_wind(new_wind_config)  # A
         # call the controller step function
         sim_inputs = {
             'phiSetpoint': 0.15,
@@ -61,7 +66,7 @@ if __name__ == "__main__":
 
         print(sim['position/h-sl-ft'])
         # continue from here
-        if sim['position/h-sl-ft'] <= 0 or len(data['aileron']) == 2000:
+        if sim['position/h-sl-ft'] <= 0 or len(data['aileron']) == 50000:
             break
 
     # write the simulation results to a csv file
