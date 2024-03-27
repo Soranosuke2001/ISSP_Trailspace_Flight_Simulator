@@ -19,6 +19,15 @@ def read_ic_aircraft():
     return phiItgt, thetaItgt, psiItgt, altItgt
 
 
+def read_file_config():
+    data = read_config()
+
+    csv_filename = data['file']['csv_filename']
+    decimals = data['file']['decimals']
+
+    return csv_filename, decimals
+
+
 def read_setup():
     data = read_config()
 
@@ -31,3 +40,10 @@ def read_setup():
     ini_altitude = data['setup']['ini_altitude']
 
     return aircraft_model, timestep, mass, throttle, wind, ini_velocity, ini_altitude
+
+def read_wind_config():
+    data = read_config()
+    wind_config = data.get('wind', {})
+    print("Wind Config:", wind_config)  # Debug print
+
+    return wind_config

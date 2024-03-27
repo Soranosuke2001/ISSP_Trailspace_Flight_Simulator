@@ -1,4 +1,8 @@
 {
+  "file": {
+    "csv_filename": "results.csv",
+    "decimals": 4
+  },
   "setup": {
     "aircraft_model": "Rascal110-JSBSim",
     "timestep": 0.001,
@@ -13,5 +17,11 @@
     "thetaItgt": 0,
     "psiItgt": 0,
     "altItgt": 0
+  },
+  "wind": {
+    "direction_deg": 270,
+    "speed_kts_min": 100,
+    "speed_kts_max": 120
   }
+  
 }
