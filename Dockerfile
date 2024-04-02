@@ -2,7 +2,10 @@
 FROM python:3.11.7
 
 # Install dependencies for creating virtualenv
-RUN apt-get update && apt-get install -y python3-venv
+RUN apt-get update
+RUN apt-get install -y python3-venv
+
+RUN pip install --no-cache-dir awscli
 
 # Create a working directory
 WORKDIR /app
