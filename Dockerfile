@@ -27,4 +27,4 @@ RUN pip install -r requirements.txt
 COPY Rascal110-JSBSim /app/venv/lib/python3.11/site-packages/jsbsim/aircraft/Rascal110-JSBSim
 
 # Command to run the python script
-CMD [ "python", "app.py" ]
+CMD python get_config.py && python app.py && python put_csv.py
