@@ -2,7 +2,10 @@
 FROM python:3.11.7
 
 # Install dependencies for creating virtualenv
-RUN apt-get update && apt-get install -y python3-venv
+RUN apt-get update
+RUN apt-get install -y python3-venv
+
+RUN pip install --no-cache-dir awscli
 
 # Create a working directory
 WORKDIR /app
@@ -24,4 +27,4 @@ RUN pip install -r requirements.txt
 COPY Rascal110-JSBSim /app/venv/lib/python3.11/site-packages/jsbsim/aircraft/Rascal110-JSBSim
 
 # Command to run the python script
-CMD [ "python", "app.py" ]
+CMD python get_config.py && python app.py && python put_csv.py
